@@ -1,0 +1,7 @@
+[debug] > Exec(all {file:/C:/Users/ruben/OneDrive/Documentos/ISCTE/LEI/2ºAno/2º%20Semestre/PPM/Projeto/Parte_1/Konane_Jogo/}root/products {file:/C:/Users/ruben/OneDrive/Documentos/ISCTE/LEI/2ºAno/2º%20Semestre/PPM/Projeto/Parte_1/Konane_Jogo/}root/test:products, None, None)
+[error] Invalid URI
+[error] Expected end of input.
+[error] Expected '}'
+[error] all {file:/C:/Users/ruben/OneDrive/Documentos/ISCTE/LEI/2ºAno/2º%20Semestre/PPM/Projeto/Parte_1/Konane_Jogo/}root/products {file:/C:/Users/ruben/OneDrive/Documentos/ISCTE/LEI/2ºAno/2º%20Semestre/PPM/Projeto/Parte_1/Konane_Jogo/}root/test:products
+[error]                                                          ^
+[debug] > Exec(idea-shell, None, None)

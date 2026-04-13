@@ -2,20 +2,17 @@ import Stone.Black
 
 import scala.annotation.tailrec
 
-case class TUI(gameState: Game) {
-  def printGameState(): Unit = TUI.printGameState(gameState)
+case class BoarPrinter(gameState: Game) {
+  def printBoard(): Unit = BoardPrinter.printBoard(gameState)
 }
 
-object TUI {
-  def printGameState(gameState: Game): Unit = {
+object BoardPrinter {
+  def printBoard(gameState: Game): Unit = {
     val rows = gameState.rows
     val cols = gameState.cols
     val letra = 'A'
-
+    
     println()
-    println("|---------Konane Game--------|")
-    println()
-
     @tailrec
     def loop(r: Int, c: Int): Unit = {
       (r, c) match {
@@ -38,10 +35,8 @@ object TUI {
       }
     }
     loop(0,0)
-
-    val vez = if(gameState.player == Black) "Pretas (B)" else "Brancas (W)"
+    
     println()
-    println(s"|------Vez de jogar: ${vez}------|")
-    println()
+    
   }
 }

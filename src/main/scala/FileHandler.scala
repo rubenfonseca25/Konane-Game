@@ -6,66 +6,66 @@ import scala.io.Source
 
 object FileHandler {
 
-  def saveGame(file: String, gameState: Game): Unit = {
+  def saveGame(gameState: Game, file: String): Unit = {
     val pw = new PrintWriter(new File(file))
 
-    // 1. Metadados: Linhas, Colunas, Jogador Atual
-    pw.println(s"META:${gameState.rows}:${gameState.cols}:${gameState.player}")
+    //Dimensoes
+    pw.println(s"${gameState.rows},${gameState.cols}")
 
-    // 2. Gravar o Board (Peças) usando o ciclo for permitido
-    for {
-      r <- 0 until gameState.rows
-      c <- 0 until gameState.cols
-    } {
-      gameState.board.get((r, c)).foreach { piece =>
-        pw.println(s"PIECE:$r:$c:$piece")
-      }
-    }
+    //Player
+    pw.println(gameState.player.toString)
 
-    // 3. Gravar OpenCoords
-    gameState.lstOpenCoords.foreach { case (r, c) =>
-      pw.println(s"OPEN:$r:$c")
-    }
+    //Board
+    val boardData = gameState.board.map {
+      case ((r, c), stone) => s"$r,$c,$stone"
+    }.mkString(";")
+
+    pw.println(boardData)
 
     pw.close()
+    println(s"Jogo guardado em: $file")
   }
 
-  def loadGame(file: String): Game = {
-    val lines = Source.fromFile(file).getLines().toList
+  def loadGame(file: String): Option[Game] = {
+    try {
+      val bufferedSource = Source.fromFile(file)
+      val lines = bufferedSource.getLines().toList
+      bufferedSource.close()
 
-    // Variáveis temporárias para reconstruir o estado
-    var rows = 0
-    var cols = 0
-    var player: Stone = Black
-    var board = Map[Coord2D, Stone]()
-    var openCoords = List[Coord2D]()
+      //Dimensoes
+      val dims = lines(0).split(",")
+      val r = dims(0).toInt
+      val c = dims(1).toInt
 
-    // Ciclo for para processar as linhas (conforme permitido pelo guião)
-    for (line <- lines) {
-      val parts = line.split(":")
-      parts(0) match {
-        case "META" =>
-          rows = parts(1).toInt
-          cols = parts(2).toInt
-          player = if (parts(3) == "Black") Black else White
+      //Ler Jogador Atual
+      val currentPlayer = if (lines(1) == "Black") Stone.Black else Stone.White
 
-        case "PIECE" =>
-          val r = parts(1).toInt
-          val c = parts(2).toInt
-          val p = if (parts(3) == "Black") Black else White
-          board += ((r, c) -> p)
+      //Reconstruir Board
+      //Se o tabuleiro estiver vazio na linha 3, tratamos como Map vazio
+      val boardEntries = if (lines(2).isEmpty) Array.empty[String] else lines(2).split(";")
 
-        case "OPEN" =>
-          val r = parts(1).toInt
-          val c = parts(2).toInt
-          openCoords = (r, c) :: openCoords
+      val boardMap = boardEntries.map { entry =>
+        val parts = entry.split(",")
+        val coord = (parts(0).toInt, parts(1).toInt)
+        val stone = if (parts(2) == "Black") Stone.Black else Stone.White
+        coord -> stone
+      }.toMap
 
-        case _ => // Ignora linhas vazias ou estranhas
-      }
+      //Recalcular lstOpenCoords
+      val allCoords = for {
+        i <- 0 until r
+        j <- 0 until c
+      } yield (i, j)
+
+      val openCoords = allCoords.filterNot(boardMap.contains).toList
+
+      //Retorna o Game completo
+      Some(Game(boardMap.to(ParMap), openCoords, currentPlayer, r, c))
+
+    } catch {
+      case e: Exception =>
+        println(s"Erro ao carregar ficheiro: ${e.getMessage}")
+        None
     }
-
-    val boardPar = ParMap(board.toSeq: _*)
-    
-    Game(boardPar, openCoords, player, rows, cols)
   }
 }

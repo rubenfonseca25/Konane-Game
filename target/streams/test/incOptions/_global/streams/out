@@ -1,5 +1,0 @@
-[debug] Created transactional ClassFileManager with tempDir = C:\Konane_Jogo\target\scala-3.8.2\test-classes.bak
-[debug] About to delete class files:
-[debug] We backup class files:
-[debug] Created transactional ClassFileManager with tempDir = C:\Konane_Jogo\target\scala-3.8.2\test-classes.bak
-[debug] Removing the temporary directory used for backing up class files: C:\Konane_Jogo\target\scala-3.8.2\test-classes.bak

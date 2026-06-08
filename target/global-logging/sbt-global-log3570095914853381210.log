@@ -1,7 +1,0 @@
-[debug] > Exec(all {file:/C:/Konane_Jogo/}root/products {file:/C:/Konane_Jogo/}root/test:products, None, None)
-[debug] Evaluating tasks: Compile / products, Test / products
-[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
-[info] compiling 4 Scala sources to C:\Konane_Jogo\target\scala-3.8.2\classes ...
-[info] done compiling
-[success] Total time: 1 s, completed 09/04/2026, 16:40:12
-[debug] > Exec(idea-shell, None, None)
